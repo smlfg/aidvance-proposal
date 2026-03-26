@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Proposal für AIDVANCE</title>
+  <style>
+    :root {
+      --bg-primary: #0F1117;
+      --bg-card: #1A1D27;
+      --bg-card-hover: #22263A;
+      --accent: #2563EB;
+      --accent-light: #3B82F6;
+      --text-primary: #E2E8F0;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --border: #2D3348;
+      --success: #22C55E;
+      --danger: #EF4444;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+    }
+
+    a {
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus-visible {
+      text-decoration: underline;
+    }
+
+    .page-shell {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+    }
+
+    header,
+    section,
+    footer {
+      position: relative;
+    }
+
+    #hero {
+      padding: 6rem 0 4.5rem;
+      border-bottom: 1px solid rgba(45, 51, 72, 0.55);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      background: rgba(26, 29, 39, 0.72);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      line-height: 1.04;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      max-width: 12ch;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .subtitle {
+      margin-top: 1.35rem;
+      max-width: 38rem;
+      font-size: 1.18rem;
+      color: var(--text-secondary);
+    }
+
+    .context {
+      margin-top: 1.6rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    main section {
+      padding: 5rem 0;
+      border-bottom: 1px solid rgba(45, 51, 72, 0.45);
+    }
+
+    .section-head {
+      display: grid;
+      gap: 0.85rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .tier-tagline {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+    }
+
+    .section-intro {
+      max-width: 44rem;
+      color: var(--text-secondary);
+      font-size: 1.02rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .domain-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.15rem;
+      margin-top: 2.25rem;
+    }
+
+    .domain-card {
+      padding: 1.65rem;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .domain-card:hover {
+      transform: translateY(-2px);
+      background: var(--bg-card-hover);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .domain-icon {
+      display: block;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .domain-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .domain-card p {
+      color: var(--text-secondary);
+      max-width: 30ch;
+    }
+
+    .credentials {
+      margin-top: 1.75rem;
+      padding: 1.75rem;
+    }
+
+    .credentials-title,
+    .subsection-title {
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .credentials ul,
+    .principles ul,
+    .experience ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .credentials li,
+    .principles li,
+    .experience li {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+    }
+
+    .credentials li + li,
+    .principles li + li,
+    .experience li + li {
+      margin-top: 0.9rem;
+    }
+
+    .list-mark {
+      color: var(--accent-light);
+      font-weight: 700;
+      min-width: 1.2rem;
+    }
+
+    .pipeline-layout {
+      display: grid;
+      gap: 1.9rem;
+      margin-top: 2.25rem;
+    }
+
+    .pipeline-flow-wrap {
+      position: relative;
+      padding: 1.75rem 1.1rem 1.3rem;
+      border: 1px solid rgba(45, 51, 72, 0.9);
+      border-radius: 18px;
+      background: rgba(26, 29, 39, 0.5);
+    }
+
+    .pipeline-flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .pipeline-step,
+    .pipeline-step-ab {
+      position: relative;
+      width: 100%;
+      padding: 1.1rem 1.25rem 1.15rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .pipeline-step {
+      max-width: 100%;
+      margin-bottom: 2.2rem;
+    }
+
+    .pipeline-step::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -2.2rem;
+      width: 2px;
+      height: 2.2rem;
+      transform: translateX(-50%);
+      background: var(--accent);
+    }
+
+    .pipeline-step.last-step::after,
+    .pipeline-step.loop-anchor::after {
+      display: none;
+    }
+
+    .step-head {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .step-icon {
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .step-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .step-copy {
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+    }
+
+    .ab-step {
+      position: relative;
+      width: 100%;
+      margin-bottom: 2.2rem;
+      padding-top: 1.35rem;
+    }
+
+    .ab-step::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
+      height: 1.35rem;
+      transform: translateX(-50%);
+      background: var(--accent);
+    }
+
+    .ab-step::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -2.2rem;
+      width: 2px;
+      height: 2.2rem;
+      transform: translateX(-50%);
+      background: var(--accent);
+    }
+
+    .ab-branch {
+      position: absolute;
+      top: 1.35rem;
+      left: 50%;
+      width: 74%;
+      height: calc(100% - 1.35rem);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .ab-branch::before,
+    .ab-branch::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: calc(100% - 2rem);
+      border-top: 2px solid var(--accent);
+    }
+
+    .ab-branch::before {
+      left: 0;
+      border-left: 2px solid var(--accent);
+      border-top-left-radius: 18px;
+    }
+
+    .ab-branch::after {
+      right: 0;
+      border-right: 2px solid var(--accent);
+      border-top-right-radius: 18px;
+    }
+
+    .ab-split {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .pipeline-step-ab {
+      z-index: 1;
+      min-height: 100%;
+    }
+
+    .ab-label {
+      display: inline-block;
+      margin-bottom: 0.7rem;
+      color: var(--accent-light);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .decision-step {
+      text-align: center;
+    }
+
+    .decision-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.2rem;
+    }
+
+    .decision-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.72rem 1.1rem;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: default;
+    }
+
+    .decision-button.accept {
+      background: var(--success);
+    }
+
+    .decision-button.reject {
+      background: var(--danger);
+    }
+
+    .loop-step {
+      overflow: visible;
+    }
+
+    .loop-badge {
+      display: inline-flex;
+      margin-top: 0.8rem;
+      padding: 0.22rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(37, 99, 235, 0.4);
+      color: var(--accent-light);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .loop-arrow {
+      display: none;
+    }
+
+    .principles,
+    .references,
+    .experience {
+      margin-top: 1.9rem;
+    }
+
+    .principles,
+    .experience {
+      padding: 1.75rem;
+    }
+
+    .references-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.15rem;
+    }
+
+    .reference-card {
+      padding: 1.65rem;
+    }
+
+    .reference-icon {
+      display: block;
+      margin-bottom: 0.8rem;
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .reference-meta {
+      margin-top: 0.3rem;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+
+    .reference-copy {
+      margin-top: 0.9rem;
+      color: var(--text-secondary);
+      min-height: 4.8rem;
+    }
+
+    .reference-note {
+      margin-top: 1rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    .tier.muted {
+      margin-top: 5rem;
+      padding: 2.25rem 1.75rem;
+      opacity: 0.5;
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+      background: rgba(26, 29, 39, 0.28);
+    }
+
+    .tier.muted p {
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .tier.muted p + p {
+      margin-top: 0.8rem;
+    }
+
+    footer#next-steps {
+      margin-top: 5rem;
+      padding: 4.5rem 0 0;
+      background: transparent;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-card {
+      padding: 2rem;
+    }
+
+    .cta {
+      margin-top: 1.2rem;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+      max-width: 34rem;
+    }
+
+    .questions {
+      margin-top: 2rem;
+    }
+
+    .questions ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: question;
+    }
+
+    .questions li {
+      position: relative;
+      padding-left: 2.2rem;
+      color: var(--text-secondary);
+    }
+
+    .questions li + li {
+      margin-top: 1rem;
+    }
+
+    .questions li::before {
+      counter-increment: question;
+      content: counter(question) ".";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .contact {
+      margin-top: 2rem;
+      color: var(--text-secondary);
+    }
+
+    .fade-in {
+      opacity: 1;
+      transform: none;
+    }
+
+    html.js-animate .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    html.js-animate .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    html.js-animate .pipeline-step,
+    html.js-animate .pipeline-step-ab {
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    html.js-animate .pipeline-flow .pipeline-step:nth-child(1) { transition-delay: 0s; }
+    html.js-animate .pipeline-flow .pipeline-step:nth-child(2) { transition-delay: 0.1s; }
+    html.js-animate .pipeline-flow .pipeline-step:nth-child(4) { transition-delay: 0.3s; }
+    html.js-animate .pipeline-flow .pipeline-step:nth-child(5) { transition-delay: 0.5s; }
+    html.js-animate .pipeline-flow .pipeline-step:nth-child(6) { transition-delay: 0.6s; }
+    html.js-animate .pipeline-flow .pipeline-step:nth-child(7) { transition-delay: 0.7s; }
+    html.js-animate .ab-step { transition-delay: 0.4s; }
+    html.js-animate .ab-step .pipeline-step-ab:nth-child(1) { transition-delay: 0.45s; }
+    html.js-animate .ab-step .pipeline-step-ab:nth-child(2) { transition-delay: 0.5s; }
+
+    @media (min-width: 768px) {
+      #hero {
+        padding-top: 7.5rem;
+        padding-bottom: 5.5rem;
+      }
+
+      h1 {
+        font-size: 3.5rem;
+      }
+
+      h2 {
+        font-size: 2rem;
+      }
+
+      .subtitle {
+        font-size: 1.28rem;
+      }
+
+      main section {
+        padding: 6rem 0;
+      }
+
+      .domain-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.35rem;
+      }
+
+      .domain-card:nth-child(4) {
+        grid-column: 1 / 2;
+      }
+
+      .domain-card:nth-child(5) {
+        grid-column: 2 / 3;
+      }
+
+      .pipeline-step,
+      .pipeline-step-ab {
+        min-width: 280px;
+      }
+
+      .ab-split {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .decision-actions {
+        flex-direction: row;
+        justify-content: center;
+      }
+
+      .references-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .pipeline-layout {
+        gap: 2.5rem;
+      }
+
+      .pipeline-flow-wrap {
+        padding: 2rem 5rem 1.75rem 2rem;
+      }
+
+      .loop-arrow {
+        display: block;
+        position: absolute;
+        top: 5.75rem;
+        right: 0;
+        width: 78px;
+        height: 360px;
+        overflow: visible;
+        pointer-events: none;
+      }
+
+      .loop-arrow path {
+        stroke: var(--accent);
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header id="hero" class="fade-in">
+      <div class="eyebrow">Proposal · Agentische Enablement-Roadmap</div>
+      <h1>Proposal für AIDVANCE</h1>
+      <p class="subtitle">Agentische Workflows verbessern — systematisch, messbar, sicher</p>
+      <p class="context">Ergebnis des Gesprächs vom 26. März 2026 · Von Samuel Fleig</p>
+    </header>
+
+    <main>
+      <section id="coaching" class="tier tier-1 fade-in">
+        <div class="section-head">
+          <p class="tier-tagline">Stufe 1 · Sofort lieferbar</p>
+          <h2>Claude Code Coaching</h2>
+          <p class="section-intro">Hands-on Training für produktive Claude Code Nutzung, basierend auf dem Anthropic Academy Curriculum und fokussiert auf konkrete Team-Workflows statt Trial-and-Error.</p>
+        </div>
+
+        <div class="domain-grid">
+          <article class="domain-card card">
+            <span class="domain-icon" aria-hidden="true">🏗️</span>
+            <div class="domain-top">
+              <h3>Agentic Architecture &amp; Orchestration</h3>
+              <span class="badge">27%</span>
+            </div>
+            <p>Multi-Agent-Systeme, Task-Dekomposition und Hub-and-Spoke Patterns für robuste Workflows.</p>
+          </article>
+
+          <article class="domain-card card">
+            <span class="domain-icon" aria-hidden="true">⚙️</span>
+            <div class="domain-top">
+              <h3>Tool Design &amp; MCP Integration</h3>
+              <span class="badge">18%</span>
+            </div>
+            <p>Model Context Protocol Server, klare Tool-Boundaries und saubere Integrationspunkte.</p>
+          </article>
+
+          <article class="domain-card card">
+            <span class="domain-icon" aria-hidden="true">💻</span>
+            <div class="domain-top">
+              <h3>Claude Code Configuration &amp; Workflows</h3>
+              <span class="badge">20%</span>
+            </div>
+            <p>Setup, Hooks, Modes und Custom Skills für wiederholbare tägliche Nutzung im Team.</p>
+          </article>
+
+          <article class="domain-card card">
+            <span class="domain-icon" aria-hidden="true">✍️</span>
+            <div class="domain-top">
+              <h3>Prompt Engineering &amp; Structured Output</h3>
+              <span class="badge">20%</span>
+            </div>
+            <p>Effektive Prompts, JSON-Output und kontrollierte Chain-of-Thought-nahe Arbeitsweisen.</p>
+          </article>
+
+          <article class="domain-card card">
+            <span class="domain-icon" aria-hidden="true">🧠</span>
+            <div class="domain-top">
+              <h3>Context Management &amp; Reliability</h3>
+              <span class="badge">15%</span>
+            </div>
+            <p>Kontext-Fenster optimieren, Fehlerbehandlung verbessern und Recovery gezielt einbauen.</p>
+          </article>
+        </div>
+
+        <div class="credentials card">
+          <div class="credentials-title">Credentials</div>
+          <ul>
+            <li><span class="list-mark">01</span><span>2 Monate intensives Arbeiten mit Claude Code</span></li>
+            <li><span class="list-mark">02</span><span>44 Projekte mit Git-Versionierung, 800+ Commits</span></li>
+            <li><span class="list-mark">03</span><span>Eigenes Eval-Framework für messbare Qualitätsverbesserung</span></li>
+            <li><span class="list-mark">04</span><span>Für non-native-IT Nutzer empfehlen wir Claude CoWork (GUI) als Einstieg</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="evolve-pipeline" class="tier tier-2 fade-in">
+        <div class="section-head">
+          <p class="tier-tagline">Stufe 2 · Der eigentliche Wert</p>
+          <h2>Evolve-Pipeline MVP</h2>
+          <p class="section-intro">Ein System, das agentische Workflows nach jedem Run evaluiert und gezielt verbessert. Der Fokus liegt auf messbarer Qualität, nachvollziehbaren Entscheidungen und sicherer Iteration.</p>
+        </div>
+
+        <div class="pipeline-layout">
+          <div class="pipeline-flow-wrap">
+            <div class="pipeline-flow">
+              <article class="pipeline-step fade-in">
+                <div class="step-head">
+                  <span class="step-icon" aria-hidden="true">🔄</span>
+                  <div class="step-title">Agentischer Workflow</div>
+                </div>
+                <p class="step-copy">Euer bestehendes Setup läuft wie gewohnt.</p>
+              </article>
+
+              <article class="pipeline-step fade-in">
+                <div class="step-head">
+                  <span class="step-icon" aria-hidden="true">👁️</span>
+                  <div class="step-title">Observer</div>
+                </div>
+                <p class="step-copy">Beobachtet den Workflow automatisch.</p>
+              </article>
+
+              <article class="pipeline-step fade-in">
+                <div class="step-head">
+                  <span class="step-icon" aria-hidden="true">💡</span>
+                  <div class="step-title">Improvement-Vorschläge</div>
+                </div>
+                <p class="step-copy">Generiert eine Liste möglicher Verbesserungen.</p>
+              </article>
+
+              <article class="pipeline-step fade-in">
+                <div class="step-head">
+                  <span class="step-icon" aria-hidden="true">☝️</span>
+                  <div class="step-title">Pick ONE</div>
+                </div>
+                <p class="step-copy">Eine Verbesserung auswählen, isoliert testbar.</p>
+              </article>
+
+              <div class="ab-step fade-in" aria-label="A/B Run">
+                <div class="ab-branch" aria-hidden="true"></div>
+                <div class="ab-split">
+                  <article class="pipeline-step-ab fade-in">
+                    <span class="ab-label">A · Ohne Änderung</span>
+                    <div class="step-head">
+                      <span class="step-icon" aria-hidden="true">⚖️</span>
+                      <div class="step-title">A/B Run</div>
+                    </div>
+                    <p class="step-copy">Workflow ohne Verbesserung als Baseline.</p>
+                  </article>
+                  <article class="pipeline-step-ab fade-in">
+                    <span class="ab-label">B · Mit Verbesserung</span>
+                    <div class="step-head">
+                      <span class="step-icon" aria-hidden="true">⚖️</span>
+                      <div class="step-title">A/B Run</div>
+                    </div>
+                    <p class="step-copy">Workflow mit genau einer gezielten Änderung.</p>
+                  </article>
+                </div>
+              </div>
+
+              <article class="pipeline-step fade-in">
+                <div class="step-head">
+                  <span class="step-icon" aria-hidden="true">👤</span>
+                  <div class="step-title">Human Eval</div>
+                </div>
+                <p class="step-copy">Mensch bewertet: Ist B signifikant besser als A?</p>
+              </article>
+
+              <article class="pipeline-step fade-in decision-step">
+                <div class="step-head">
+                  <span class="step-icon" aria-hidden="true">✅</span>
+                  <div class="step-title">Accept / Reject</div>
+                </div>
+                <p class="step-copy">Verbesserung übernehmen oder verwerfen.</p>
+                <div class="decision-actions" aria-hidden="true">
+                  <span class="decision-button accept">Accept ✓</span>
+                  <span class="decision-button reject">Reject ✗</span>
+                </div>
+              </article>
+
+              <article class="pipeline-step fade-in loop-step loop-anchor last-step">
+                <div class="step-head">
+                  <span class="step-icon" aria-hidden="true">🔁</span>
+                  <div class="step-title">Loop</div>
+                </div>
+                <p class="step-copy">Zurück zum Observer für kontinuierliche Verbesserung.</p>
+                <span class="loop-badge">Nächster Zyklus</span>
+              </article>
+            </div>
+
+            <svg class="loop-arrow" viewBox="0 0 78 360" aria-hidden="true">
+              <path d="M8 16 C60 16, 60 16, 60 72 L60 308 C60 340, 42 344, 24 344 L6 344"></path>
+              <path d="M18 334 L6 344 L18 354"></path>
+            </svg>
+          </div>
+
+          <div class="principles card">
+            <div class="subsection-title">Vier Prinzipien</div>
+            <ul>
+              <li><span class="list-mark">✅</span><span>Qualität &gt; Geschwindigkeit, besonders bei therapeutischen Daten.</span></li>
+              <li><span class="list-mark">👤</span><span>Human-in-the-Loop ist Pflicht. Kein blinder Auto-Accept.</span></li>
+              <li><span class="list-mark">🎯</span><span>Eine Verbesserung pro Zyklus, isoliert testbar und nachvollziehbar.</span></li>
+              <li><span class="list-mark">🔬</span><span>Erst wenn der Prozess gut ist, dann automatisieren.</span></li>
+            </ul>
+          </div>
+
+          <div class="references">
+            <div class="references-grid">
+              <article class="reference-card card">
+                <span class="reference-icon" aria-hidden="true">🔬</span>
+                <h3>Karpathy AutoResearch</h3>
+                <p class="reference-meta">Andrej Karpathy · März 2026</p>
+                <p class="reference-copy">AI-Agent der autonom Experimente durchführt, rund 12 pro Stunde. Behält was funktioniert und verwirft was nicht hilft.</p>
+                <p class="reference-note"><a href="https://github.com/karpathy/autoresearch" target="_blank" rel="noreferrer noopener">github.com/karpathy/autoresearch</a></p>
+              </article>
+
+              <article class="reference-card card">
+                <span class="reference-icon" aria-hidden="true">📄</span>
+                <h3>Google Hyperagents</h3>
+                <p class="reference-meta">Google · März 2026 · arXiv 2603.19461</p>
+                <p class="reference-copy">Meta-Agent, der nicht nur Tasks verbessert, sondern seinen eigenen Verbesserungsprozess optimiert.</p>
+                <p class="reference-note"><a href="https://arxiv.org/abs/2603.19461" target="_blank" rel="noreferrer noopener">arxiv.org/abs/2603.19461</a></p>
+              </article>
+            </div>
+            <p class="reference-note">Beide zeigen: Self-Improving Agents sind kein Sci-Fi mehr, aber noch Forschung.</p>
+          </div>
+
+          <div class="experience card">
+            <div class="subsection-title">Relevante Erfahrung</div>
+            <ul>
+              <li><span class="list-mark">01</span><span>Sidecar-NG: Von 45.000 auf 1.200 Zeilen Code durch eval-driven Feature-Selektion.</span></li>
+              <li><span class="list-mark">02</span><span>AgentArena: 8 Experiments, 140+ Benchmark-Runs und pass@k Statistik.</span></li>
+              <li><span class="list-mark">03</span><span>Safety Gates: Prompt-Injection-Schutz für sensitive Daten, direkt relevant für AIDVANCE.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="autonomous" class="tier tier-3 muted fade-in">
+        <div class="section-head">
+          <p class="tier-tagline">Stufe 3 · Ausblick</p>
+          <h2>Autonomous Self-Improvement</h2>
+        </div>
+        <p>Vollautonome Verbesserung ohne Human-in-the-Loop ist die langfristige Vision.</p>
+        <p>Aktuell ein offenes Forschungsproblem. Karpathy, Google und viele andere Labs arbeiten daran.</p>
+        <p>Ich kann es versuchen, aber ich kann es nicht garantieren — nobody has solved this yet.</p>
+      </section>
+    </main>
+
+    <footer id="next-steps" class="fade-in">
+      <div class="footer-card card">
+        <p class="tier-tagline">Nächste Schritte</p>
+        <h2>Von der Idee zu belastbaren Beispiel-Workflows</h2>
+        <p class="cta">Nächster Schritt: Beispiel-Workflows von AIDVANCE teilen (non-confidential)</p>
+
+        <div class="questions">
+          <ol>
+            <li>Wie funktioniert euer Produkt technisch — ist Karl auch ein agentisches System?</li>
+            <li>Welche Tasks bearbeitet ihr aktuell mit agentischen Workflows?</li>
+            <li>Könnt ihr non-confidential Beispieldaten teilen?</li>
+          </ol>
+        </div>
+
+        <p class="contact">Kontakt: Samuel Fleig</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      document.documentElement.classList.add("js-animate");
+      var elements = document.querySelectorAll("header, section, footer, .pipeline-step, .ab-step, .pipeline-step-ab");
+
+      if (!("IntersectionObserver" in window)) {
+        elements.forEach(function (element) {
+          element.classList.add("visible");
+        });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries, currentObserver) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) {
+            return;
+          }
+          entry.target.classList.add("visible");
+          currentObserver.unobserve(entry.target);
+        });
+      }, {
+        threshold: 0.1
+      });
+
+      elements.forEach(function (element) {
+        if (element.classList.contains("fade-in")) {
+          observer.observe(element);
+        }
+      });
+    }());
+  </script>
+</body>
+</html>

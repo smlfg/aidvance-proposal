@@ -129,6 +129,14 @@
       background: rgba(26, 29, 39, 0.78);
       border: 1px solid rgba(45, 51, 72, 0.95);
       border-radius: 16px;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-2px);
+      background: var(--bg-card-hover);
+      border-color: rgba(59, 130, 246, 0.45);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
     }
 
     .hero-kicker {
@@ -158,6 +166,18 @@
 
     .hero-list li + li {
       margin-top: 0.45rem;
+    }
+
+    .interactive-card {
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .interactive-card:hover,
+    .interactive-card:focus-within {
+      transform: translateY(-2px);
+      background: var(--bg-card-hover);
+      border-color: rgba(59, 130, 246, 0.45);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
     }
 
     main section {
@@ -212,13 +232,6 @@
 
     .domain-card {
       padding: 1.65rem;
-      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .domain-card:hover {
-      transform: translateY(-2px);
-      background: var(--bg-card-hover);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     }
 
     .domain-icon {
@@ -296,6 +309,16 @@
       min-width: 1.2rem;
     }
 
+    .list-dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      min-width: 0.55rem;
+      margin-top: 0.45rem;
+      border-radius: 999px;
+      background: var(--accent-light);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
     .pipeline-layout {
       display: grid;
       gap: 1.9rem;
@@ -368,6 +391,72 @@
     .step-copy {
       color: var(--text-secondary);
       font-size: 0.93rem;
+    }
+
+    .card-toggle {
+      width: 100%;
+      padding: 0;
+      background: none;
+      border: none;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .card-toggle:focus-visible {
+      outline: 2px solid var(--accent-light);
+      outline-offset: 6px;
+      border-radius: 10px;
+    }
+
+    .card-toggle-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.9rem;
+    }
+
+    .toggle-indicator {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.8rem;
+      height: 1.8rem;
+      min-width: 1.8rem;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 999px;
+      color: var(--accent-light);
+      font-size: 1rem;
+      line-height: 1;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .card-toggle[aria-expanded="true"] .toggle-indicator {
+      transform: rotate(45deg);
+      background: rgba(37, 99, 235, 0.12);
+    }
+
+    .card-summary {
+      margin-top: 0.55rem;
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+      max-width: 36ch;
+    }
+
+    .card-detail {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(45, 51, 72, 0.85);
+      color: var(--text-secondary);
+    }
+
+    .card-detail p + p {
+      margin-top: 0.7rem;
+    }
+
+    html.js-ready .card-detail[hidden] {
+      display: none;
     }
 
     .ab-step {
@@ -555,14 +644,13 @@
     .tier.muted {
       margin-top: 5rem;
       padding: 2.25rem 1.75rem;
-      opacity: 0.5;
+      opacity: 0.72;
       border: 1px dashed var(--border);
       border-radius: 16px;
       background: rgba(26, 29, 39, 0.28);
     }
 
     .tier.muted p {
-      font-style: italic;
       color: var(--text-muted);
     }
 
@@ -760,12 +848,11 @@
         </div>
         <div class="hero-card">
           <span class="hero-kicker">Das konkrete Problem</span>
-          <p>Wenn agentische Workflows intern helfen sollen, müssen sie nicht nur schneller sein, sondern <strong>verlässlich besser</strong>, nachvollziehbar und sicher genug für ein reguliertes Umfeld.</p>
+          <p>Der Scope ist nicht, <strong>Karl als Produkt</strong> zu verändern. Der Scope ist, die Arbeitsweise der Mitarbeiter zu verbessern: bessere Nutzung von AI-Tools, verlässlichere interne Workflows und weniger Trial-and-Error im Alltag.</p>
         </div>
         <div class="hero-card">
-          <span class="hero-kicker">Pilot-Angebot</span>
+          <span class="hero-kicker">Pilot-Rahmen</span>
           <ul class="hero-list">
-            <li><strong>Preis:</strong> 9.500 EUR pauschal</li>
             <li><strong>Zeit:</strong> 2 Wochen für Coaching plus MVP-Design</li>
             <li><strong>Ziel:</strong> ein belastbarer erster Beispiel-Workflow</li>
           </ul>
@@ -778,64 +865,119 @@
         <div class="section-head">
           <p class="tier-tagline">Stufe 1 · Sofort lieferbar</p>
           <h2>Claude Code Coaching</h2>
-          <p class="section-intro">Hands-on Training für produktive Claude Code Nutzung, basierend auf dem Anthropic Academy Curriculum und fokussiert auf konkrete Team-Workflows statt Trial-and-Error.</p>
+          <p class="section-intro">Hands-on Training für produktive Claude Code Nutzung, basierend auf dem Anthropic Academy Curriculum und fokussiert auf konkrete Mitarbeiter-Workflows statt Trial-and-Error. Alle Felder unten sind anklickbar und erklären den Nutzen in ganzen Sätzen.</p>
           <p class="section-note">Die Prozentwerte zeigen die Gewichtung der Themen im Claude Certified Architect Curriculum. Sie sind keine Aufwandsschätzung für AIDVANCE, sondern helfen zu sehen, welche Kompetenzen im Coaching besonders stark abgedeckt werden.</p>
         </div>
 
         <div class="domain-grid">
-          <article class="domain-card card">
-            <span class="domain-icon" aria-hidden="true">🏗️</span>
-            <div class="domain-top">
-              <h3>Agentic Architecture &amp; Orchestration</h3>
-              <span class="badge">27%</span>
+          <article class="domain-card card interactive-card">
+            <button class="card-toggle" type="button" aria-expanded="false" aria-controls="detail-architecture">
+              <span class="domain-icon" aria-hidden="true">🏗️</span>
+              <span class="card-toggle-row">
+                <span>
+                  <span class="domain-top">
+                    <h3>Agentic Architecture &amp; Orchestration</h3>
+                    <span class="badge">27%</span>
+                  </span>
+                  <span class="card-summary">Multi-Agent-Systeme, Task-Dekomposition und Hub-and-Spoke Patterns für robuste Workflows.</span>
+                </span>
+                <span class="toggle-indicator" aria-hidden="true">+</span>
+              </span>
+            </button>
+            <div class="card-detail" id="detail-architecture">
+              <p>Hier geht es darum, wie Mitarbeiter Aufgaben so strukturieren, dass Agenten sinnvoll zusammenarbeiten statt chaotisch parallel zu laufen. Das reduziert Reibung, macht Ergebnisse nachvollziehbarer und verbessert die Qualität der täglichen Arbeit.</p>
+              <p>Gerade in einem kleinen Team ist das wichtig, weil gute Orchestrierung nicht nur Zeit spart, sondern auch Verantwortung und Entscheidungspunkte klarer macht.</p>
             </div>
-            <p>Multi-Agent-Systeme, Task-Dekomposition und Hub-and-Spoke Patterns für robuste Workflows.</p>
           </article>
 
-          <article class="domain-card card">
-            <span class="domain-icon" aria-hidden="true">⚙️</span>
-            <div class="domain-top">
-              <h3>Tool Design &amp; MCP Integration</h3>
-              <span class="badge">18%</span>
+          <article class="domain-card card interactive-card">
+            <button class="card-toggle" type="button" aria-expanded="false" aria-controls="detail-tools">
+              <span class="domain-icon" aria-hidden="true">⚙️</span>
+              <span class="card-toggle-row">
+                <span>
+                  <span class="domain-top">
+                    <h3>Tool Design &amp; MCP Integration</h3>
+                    <span class="badge">18%</span>
+                  </span>
+                  <span class="card-summary">Model Context Protocol Server, klare Tool-Boundaries und saubere Integrationspunkte.</span>
+                </span>
+                <span class="toggle-indicator" aria-hidden="true">+</span>
+              </span>
+            </button>
+            <div class="card-detail" id="detail-tools">
+              <p>Mitarbeiter sollen nicht mit einer Black Box arbeiten, sondern mit klar definierten Tools, die zuverlässig dasselbe tun. Gute Toolgrenzen verhindern, dass Agenten unnötig halluzinieren oder Dinge an der falschen Stelle entscheiden.</p>
+              <p>Das ist besonders relevant, wenn interne Prozesse später messbar verbessert und sicherer gemacht werden sollen.</p>
             </div>
-            <p>Model Context Protocol Server, klare Tool-Boundaries und saubere Integrationspunkte.</p>
           </article>
 
-          <article class="domain-card card">
-            <span class="domain-icon" aria-hidden="true">💻</span>
-            <div class="domain-top">
-              <h3>Claude Code Configuration &amp; Workflows</h3>
-              <span class="badge">20%</span>
+          <article class="domain-card card interactive-card">
+            <button class="card-toggle" type="button" aria-expanded="false" aria-controls="detail-config">
+              <span class="domain-icon" aria-hidden="true">💻</span>
+              <span class="card-toggle-row">
+                <span>
+                  <span class="domain-top">
+                    <h3>Claude Code Configuration &amp; Workflows</h3>
+                    <span class="badge">20%</span>
+                  </span>
+                  <span class="card-summary">Setup, Hooks, Modes und Custom Skills für wiederholbare tägliche Nutzung im Team.</span>
+                </span>
+                <span class="toggle-indicator" aria-hidden="true">+</span>
+              </span>
+            </button>
+            <div class="card-detail" id="detail-config">
+              <p>Hier wird aus Einzelnutzung ein Team-Workflow. Mitarbeiter lernen, wie sie Claude Code so konfigurieren, dass wiederholbare Abläufe entstehen und nicht jedes Mal bei null gestartet wird.</p>
+              <p>Das Ziel ist eine saubere Arbeitsweise, die im Alltag trägt und nicht nur in einer Demo gut aussieht.</p>
             </div>
-            <p>Setup, Hooks, Modes und Custom Skills für wiederholbare tägliche Nutzung im Team.</p>
           </article>
 
-          <article class="domain-card card">
-            <span class="domain-icon" aria-hidden="true">✍️</span>
-            <div class="domain-top">
-              <h3>Prompt Engineering &amp; Structured Output</h3>
-              <span class="badge">20%</span>
+          <article class="domain-card card interactive-card">
+            <button class="card-toggle" type="button" aria-expanded="false" aria-controls="detail-prompts">
+              <span class="domain-icon" aria-hidden="true">✍️</span>
+              <span class="card-toggle-row">
+                <span>
+                  <span class="domain-top">
+                    <h3>Prompt Engineering &amp; Structured Output</h3>
+                    <span class="badge">20%</span>
+                  </span>
+                  <span class="card-summary">Effektive Prompts, JSON-Output und kontrollierte Chain-of-Thought-nahe Arbeitsweisen.</span>
+                </span>
+                <span class="toggle-indicator" aria-hidden="true">+</span>
+              </span>
+            </button>
+            <div class="card-detail" id="detail-prompts">
+              <p>Gute Prompts sind keine Magie, sondern eine Form von präziser Arbeitsanweisung. Mitarbeiter lernen, wie sie Aufgaben so formulieren, dass Outputs konsistent, prüfbar und für weitere Schritte nutzbar sind.</p>
+              <p>Gerade strukturierte Outputs sind die Grundlage dafür, dass Workflows später evaluiert und verbessert werden können.</p>
             </div>
-            <p>Effektive Prompts, JSON-Output und kontrollierte Chain-of-Thought-nahe Arbeitsweisen.</p>
           </article>
 
-          <article class="domain-card card">
-            <span class="domain-icon" aria-hidden="true">🧠</span>
-            <div class="domain-top">
-              <h3>Context Management &amp; Reliability</h3>
-              <span class="badge">15%</span>
+          <article class="domain-card card interactive-card">
+            <button class="card-toggle" type="button" aria-expanded="false" aria-controls="detail-context">
+              <span class="domain-icon" aria-hidden="true">🧠</span>
+              <span class="card-toggle-row">
+                <span>
+                  <span class="domain-top">
+                    <h3>Context Management &amp; Reliability</h3>
+                    <span class="badge">15%</span>
+                  </span>
+                  <span class="card-summary">Kontext-Fenster optimieren, Fehlerbehandlung verbessern und Recovery gezielt einbauen.</span>
+                </span>
+                <span class="toggle-indicator" aria-hidden="true">+</span>
+              </span>
+            </button>
+            <div class="card-detail" id="detail-context">
+              <p>Viele AI-Workflows scheitern nicht an der Idee, sondern an instabilem Kontext und fehlender Fehlerbehandlung. Genau hier lernen Mitarbeiter, wie sie verlässliche Abläufe bauen, die auch bei unklaren Inputs nicht sofort kippen.</p>
+              <p>Das macht die tägliche Nutzung weniger frustrierend und die Ergebnisse deutlich belastbarer.</p>
             </div>
-            <p>Kontext-Fenster optimieren, Fehlerbehandlung verbessern und Recovery gezielt einbauen.</p>
           </article>
         </div>
 
         <div class="credentials card">
           <div class="credentials-title">Credentials</div>
           <ul>
-            <li><span class="list-mark">01</span><span>2 Monate intensives Arbeiten mit Claude Code</span></li>
-            <li><span class="list-mark">02</span><span>44 Projekte mit Git-Versionierung, 800+ Commits</span></li>
-            <li><span class="list-mark">03</span><span>Eigenes Eval-Framework für messbare Qualitätsverbesserung</span></li>
-            <li><span class="list-mark">04</span><span>Für non-native-IT Nutzer empfehlen wir Claude CoWork (GUI) als Einstieg</span></li>
+            <li><span class="list-dot" aria-hidden="true"></span><span>2 Monate intensives Arbeiten mit Claude Code</span></li>
+            <li><span class="list-dot" aria-hidden="true"></span><span>44 Projekte mit Git-Versionierung, 800+ Commits</span></li>
+            <li><span class="list-dot" aria-hidden="true"></span><span>Eigenes Eval-Framework für messbare Qualitätsverbesserung</span></li>
+            <li><span class="list-dot" aria-hidden="true"></span><span>Für non-native-IT Nutzer empfehlen wir Claude CoWork (GUI) als Einstieg</span></li>
           </ul>
         </div>
       </section>
@@ -844,92 +986,182 @@
         <div class="section-head">
           <p class="tier-tagline">Stufe 2 · Der eigentliche Wert</p>
           <h2>Evolve-Pipeline MVP</h2>
-          <p class="section-intro">Ein System, das agentische Workflows nach jedem Run evaluiert und gezielt verbessert. Der Fokus liegt auf messbarer Qualität, nachvollziehbaren Entscheidungen und sicherer Iteration.</p>
+          <p class="section-intro">Ein System, das agentische Mitarbeiter-Workflows nach jedem Run evaluiert und gezielt verbessert. Der Fokus liegt auf messbarer Qualität, nachvollziehbaren Entscheidungen und sicherer Iteration. Auch hier lassen sich die Felder anklicken, um die Logik genauer zu sehen.</p>
         </div>
 
         <div class="pipeline-layout">
           <div class="pipeline-flow-wrap">
             <div class="pipeline-flow">
-              <article class="pipeline-step fade-in">
-                <div class="step-head">
-                  <span class="step-icon" aria-hidden="true">🔄</span>
-                  <div class="step-title">Agentischer Workflow</div>
+              <article class="pipeline-step fade-in interactive-card">
+                <button class="card-toggle" type="button" aria-expanded="false" aria-controls="step-detail-workflow">
+                  <span class="card-toggle-row">
+                    <span>
+                      <span class="step-head">
+                        <span class="step-icon" aria-hidden="true">🔄</span>
+                        <span class="step-title">Agentischer Workflow</span>
+                      </span>
+                      <span class="step-copy">Euer bestehendes Setup läuft wie gewohnt.</span>
+                    </span>
+                    <span class="toggle-indicator" aria-hidden="true">+</span>
+                  </span>
+                </button>
+                <div class="card-detail" id="step-detail-workflow">
+                  <p>Der Ausgangspunkt ist nicht ein neues Produkt, sondern ein bestehender interner Workflow eines Mitarbeiters. Genau dieser Ablauf wird beobachtet, bewertet und gezielt verbessert, ohne ihn sofort komplett neu zu bauen.</p>
                 </div>
-                <p class="step-copy">Euer bestehendes Setup läuft wie gewohnt.</p>
               </article>
 
-              <article class="pipeline-step fade-in">
-                <div class="step-head">
-                  <span class="step-icon" aria-hidden="true">👁️</span>
-                  <div class="step-title">Observer</div>
+              <article class="pipeline-step fade-in interactive-card">
+                <button class="card-toggle" type="button" aria-expanded="false" aria-controls="step-detail-observer">
+                  <span class="card-toggle-row">
+                    <span>
+                      <span class="step-head">
+                        <span class="step-icon" aria-hidden="true">👁️</span>
+                        <span class="step-title">Observer</span>
+                      </span>
+                      <span class="step-copy">Beobachtet den Workflow automatisch.</span>
+                    </span>
+                    <span class="toggle-indicator" aria-hidden="true">+</span>
+                  </span>
+                </button>
+                <div class="card-detail" id="step-detail-observer">
+                  <p>Der Observer schaut auf Ablauf, Entscheidungen und Ergebnisqualität. Dadurch wird sichtbar, wo Mitarbeiter heute noch Zeit verlieren oder wo ein Agent unnötig unzuverlässig arbeitet.</p>
                 </div>
-                <p class="step-copy">Beobachtet den Workflow automatisch.</p>
               </article>
 
-              <article class="pipeline-step fade-in">
-                <div class="step-head">
-                  <span class="step-icon" aria-hidden="true">💡</span>
-                  <div class="step-title">Improvement-Vorschläge</div>
+              <article class="pipeline-step fade-in interactive-card">
+                <button class="card-toggle" type="button" aria-expanded="false" aria-controls="step-detail-ideas">
+                  <span class="card-toggle-row">
+                    <span>
+                      <span class="step-head">
+                        <span class="step-icon" aria-hidden="true">💡</span>
+                        <span class="step-title">Improvement-Vorschläge</span>
+                      </span>
+                      <span class="step-copy">Generiert eine Liste möglicher Verbesserungen.</span>
+                    </span>
+                    <span class="toggle-indicator" aria-hidden="true">+</span>
+                  </span>
+                </button>
+                <div class="card-detail" id="step-detail-ideas">
+                  <p>Aus der Beobachtung entsteht keine vage Empfehlung, sondern eine konkrete Liste von Hypothesen. So lässt sich systematisch auswählen, welche Änderung für die Mitarbeiter wirklich den größten Unterschied machen könnte.</p>
                 </div>
-                <p class="step-copy">Generiert eine Liste möglicher Verbesserungen.</p>
               </article>
 
-              <article class="pipeline-step fade-in">
-                <div class="step-head">
-                  <span class="step-icon" aria-hidden="true">☝️</span>
-                  <div class="step-title">Pick ONE</div>
+              <article class="pipeline-step fade-in interactive-card">
+                <button class="card-toggle" type="button" aria-expanded="false" aria-controls="step-detail-pick">
+                  <span class="card-toggle-row">
+                    <span>
+                      <span class="step-head">
+                        <span class="step-icon" aria-hidden="true">☝️</span>
+                        <span class="step-title">Pick ONE</span>
+                      </span>
+                      <span class="step-copy">Eine Verbesserung auswählen, isoliert testbar.</span>
+                    </span>
+                    <span class="toggle-indicator" aria-hidden="true">+</span>
+                  </span>
+                </button>
+                <div class="card-detail" id="step-detail-pick">
+                  <p>Es wird bewusst nur eine Änderung pro Zyklus getestet. Das macht die Ergebnisse nachvollziehbar und verhindert, dass mehrere Eingriffe gleichzeitig den Lerneffekt verwischen.</p>
                 </div>
-                <p class="step-copy">Eine Verbesserung auswählen, isoliert testbar.</p>
               </article>
 
               <div class="ab-step fade-in" aria-label="A/B Run">
                 <div class="ab-branch" aria-hidden="true"></div>
                 <div class="ab-split">
-                  <article class="pipeline-step-ab fade-in">
-                    <span class="ab-label">A · Ohne Änderung</span>
-                    <div class="step-head">
-                      <span class="step-icon" aria-hidden="true">⚖️</span>
-                      <div class="step-title">A/B Run</div>
+                  <article class="pipeline-step-ab fade-in interactive-card">
+                    <button class="card-toggle" type="button" aria-expanded="false" aria-controls="step-detail-a">
+                      <span class="ab-label">A · Ohne Änderung</span>
+                      <span class="card-toggle-row">
+                        <span>
+                          <span class="step-head">
+                            <span class="step-icon" aria-hidden="true">⚖️</span>
+                            <span class="step-title">A/B Run</span>
+                          </span>
+                          <span class="step-copy">Workflow ohne Verbesserung als Baseline.</span>
+                        </span>
+                        <span class="toggle-indicator" aria-hidden="true">+</span>
+                      </span>
+                    </button>
+                    <div class="card-detail" id="step-detail-a">
+                      <p>Variante A zeigt, wie der bisherige Mitarbeiter-Workflow ohne Eingriff performt. Diese Baseline ist wichtig, damit Verbesserungen nicht nur gefühlt besser wirken, sondern wirklich messbar sind.</p>
                     </div>
-                    <p class="step-copy">Workflow ohne Verbesserung als Baseline.</p>
                   </article>
-                  <article class="pipeline-step-ab fade-in">
-                    <span class="ab-label">B · Mit Verbesserung</span>
-                    <div class="step-head">
-                      <span class="step-icon" aria-hidden="true">⚖️</span>
-                      <div class="step-title">A/B Run</div>
+                  <article class="pipeline-step-ab fade-in interactive-card">
+                    <button class="card-toggle" type="button" aria-expanded="false" aria-controls="step-detail-b">
+                      <span class="ab-label">B · Mit Verbesserung</span>
+                      <span class="card-toggle-row">
+                        <span>
+                          <span class="step-head">
+                            <span class="step-icon" aria-hidden="true">⚖️</span>
+                            <span class="step-title">A/B Run</span>
+                          </span>
+                          <span class="step-copy">Workflow mit genau einer gezielten Änderung.</span>
+                        </span>
+                        <span class="toggle-indicator" aria-hidden="true">+</span>
+                      </span>
+                    </button>
+                    <div class="card-detail" id="step-detail-b">
+                      <p>Variante B enthält nur die ausgewählte Verbesserung. So lässt sich klar erkennen, ob diese Änderung die Arbeitsweise der Mitarbeiter wirklich besser macht oder nur anders aussehen lässt.</p>
                     </div>
-                    <p class="step-copy">Workflow mit genau einer gezielten Änderung.</p>
                   </article>
                 </div>
               </div>
 
-              <article class="pipeline-step fade-in">
-                <div class="step-head">
-                  <span class="step-icon" aria-hidden="true">👤</span>
-                  <div class="step-title">Human Eval</div>
+              <article class="pipeline-step fade-in interactive-card">
+                <button class="card-toggle" type="button" aria-expanded="false" aria-controls="step-detail-human">
+                  <span class="card-toggle-row">
+                    <span>
+                      <span class="step-head">
+                        <span class="step-icon" aria-hidden="true">👤</span>
+                        <span class="step-title">Human Eval</span>
+                      </span>
+                      <span class="step-copy">Mensch bewertet: Ist B signifikant besser als A?</span>
+                    </span>
+                    <span class="toggle-indicator" aria-hidden="true">+</span>
+                  </span>
+                </button>
+                <div class="card-detail" id="step-detail-human">
+                  <p>Die letzte Entscheidung trifft kein blinder Automatismus, sondern ein Mensch aus dem Team. Das ist gerade in sensitiven Domänen wichtig, weil nicht jede scheinbar effiziente Änderung auch wirklich sinnvoll oder sicher ist.</p>
                 </div>
-                <p class="step-copy">Mensch bewertet: Ist B signifikant besser als A?</p>
               </article>
 
-              <article class="pipeline-step fade-in decision-step">
-                <div class="step-head">
-                  <span class="step-icon" aria-hidden="true">✅</span>
-                  <div class="step-title">Accept / Reject</div>
+              <article class="pipeline-step fade-in decision-step interactive-card">
+                <button class="card-toggle" type="button" aria-expanded="false" aria-controls="step-detail-decision">
+                  <span class="card-toggle-row">
+                    <span>
+                      <span class="step-head">
+                        <span class="step-icon" aria-hidden="true">✅</span>
+                        <span class="step-title">Accept / Reject</span>
+                      </span>
+                      <span class="step-copy">Verbesserung übernehmen oder verwerfen.</span>
+                    </span>
+                    <span class="toggle-indicator" aria-hidden="true">+</span>
+                  </span>
+                </button>
+                <div class="card-detail" id="step-detail-decision">
+                  <p>Nur was im Vergleich wirklich besser ist, wird übernommen. Was nicht hilft, wird bewusst verworfen, damit sich der interne Workflow Schritt für Schritt verbessert statt unkontrolliert komplizierter zu werden.</p>
                 </div>
-                <p class="step-copy">Verbesserung übernehmen oder verwerfen.</p>
                 <div class="decision-actions" aria-hidden="true">
                   <span class="decision-button accept">Accept ✓</span>
                   <span class="decision-button reject">Reject ✗</span>
                 </div>
               </article>
 
-              <article class="pipeline-step fade-in loop-step loop-anchor last-step">
-                <div class="step-head">
-                  <span class="step-icon" aria-hidden="true">🔁</span>
-                  <div class="step-title">Loop</div>
+              <article class="pipeline-step fade-in loop-step loop-anchor last-step interactive-card">
+                <button class="card-toggle" type="button" aria-expanded="false" aria-controls="step-detail-loop">
+                  <span class="card-toggle-row">
+                    <span>
+                      <span class="step-head">
+                        <span class="step-icon" aria-hidden="true">🔁</span>
+                        <span class="step-title">Loop</span>
+                      </span>
+                      <span class="step-copy">Zurück zum Observer für kontinuierliche Verbesserung.</span>
+                    </span>
+                    <span class="toggle-indicator" aria-hidden="true">+</span>
+                  </span>
+                </button>
+                <div class="card-detail" id="step-detail-loop">
+                  <p>Nach jeder akzeptierten Änderung beginnt der Zyklus erneut. So entsteht keine einmalige Optimierung, sondern eine systematische Lernschleife für die Arbeitsweise der Mitarbeiter.</p>
                 </div>
-                <p class="step-copy">Zurück zum Observer für kontinuierliche Verbesserung.</p>
                 <span class="loop-badge">Nächster Zyklus</span>
               </article>
             </div>
@@ -974,9 +1206,9 @@
           <div class="experience card">
             <div class="subsection-title">Relevante Erfahrung</div>
             <ul>
-              <li><span class="list-mark">01</span><span>Sidecar-NG: Von 45.000 auf 1.200 Zeilen Code durch eval-driven Feature-Selektion.</span></li>
-              <li><span class="list-mark">02</span><span>AgentArena: 8 Experiments, 140+ Benchmark-Runs und pass@k Statistik.</span></li>
-              <li><span class="list-mark">03</span><span>Safety Gates: Prompt-Injection-Schutz für sensitive Daten, direkt relevant für AIDVANCE.</span></li>
+              <li><span class="list-dot" aria-hidden="true"></span><span>Sidecar-NG: Von 45.000 auf 1.200 Zeilen Code durch eval-driven Feature-Selektion.</span></li>
+              <li><span class="list-dot" aria-hidden="true"></span><span>AgentArena: 8 Experiments, 140+ Benchmark-Runs und pass@k Statistik.</span></li>
+              <li><span class="list-dot" aria-hidden="true"></span><span>Safety Gates: Prompt-Injection-Schutz für sensitive Daten, direkt relevant für AIDVANCE.</span></li>
             </ul>
           </div>
         </div>
@@ -987,9 +1219,9 @@
           <p class="tier-tagline">Stufe 3 · Ausblick</p>
           <h2>Autonomous Self-Improvement</h2>
         </div>
-        <p>Vollautonome Verbesserung ohne Human-in-the-Loop ist die langfristige Vision.</p>
-        <p>Aktuell ein offenes Forschungsproblem. Karpathy, Google und viele andere Labs arbeiten daran.</p>
-        <p>Ich kann es versuchen, aber ich kann es nicht garantieren — nobody has solved this yet.</p>
+        <p>Stufe 3 macht erst Sinn, wenn Stufe 1 das Team befähigt hat und Stufe 2 einen belastbaren Verbesserungsprozess für Mitarbeiter-Workflows aufgebaut hat.</p>
+        <p>Erst dann kann man erforschen, welche Teile der Verbesserungsschleife stärker automatisiert werden können: bessere Hypothesengenerierung, teilautomatische Priorisierung und weniger manueller Steueraufwand pro Zyklus.</p>
+        <p>Das bleibt aktuell ein offenes Forschungsproblem. Ich kann es explorieren, aber ich kann es nicht garantieren — nobody has solved this yet.</p>
       </section>
     </main>
 
@@ -1007,15 +1239,34 @@
           </ol>
         </div>
 
-        <p class="contact"><strong>Kontakt:</strong> Samuel Fleig · <a href="mailto:smlflg@gmail.com">smlflg@gmail.com</a> · Pilot-Angebot: 9.500 EUR pauschal · Zeitrahmen: 2 Wochen</p>
+        <p class="contact"><strong>Kontakt:</strong> Samuel Fleig · <a href="mailto:smlflg@gmail.com">smlflg@gmail.com</a> · Zeitrahmen: 2 Wochen</p>
       </div>
     </footer>
   </div>
 
   <script>
     (function () {
+      document.documentElement.classList.add("js-ready");
       document.documentElement.classList.add("js-animate");
       var elements = document.querySelectorAll("header, section, footer, .pipeline-step, .ab-step, .pipeline-step-ab");
+      var toggles = document.querySelectorAll(".card-toggle");
+
+      toggles.forEach(function (toggle) {
+        var targetId = toggle.getAttribute("aria-controls");
+        var detail = targetId ? document.getElementById(targetId) : null;
+
+        if (!detail) {
+          return;
+        }
+
+        detail.hidden = true;
+
+        toggle.addEventListener("click", function () {
+          var expanded = toggle.getAttribute("aria-expanded") === "true";
+          toggle.setAttribute("aria-expanded", expanded ? "false" : "true");
+          detail.hidden = expanded;
+        });
+      });
 
       if (!("IntersectionObserver" in window)) {
         elements.forEach(function (element) {

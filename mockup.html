@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Evolve-Pipeline — Live Example</title>
+  <style>
+    :root {
+      --bg-primary: #0F1117;
+      --bg-card: #1A1D27;
+      --bg-card-hover: #22263A;
+      --accent: #2563EB;
+      --accent-light: #3B82F6;
+      --text-primary: #E2E8F0;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --border: #2D3348;
+      --success: #22C55E;
+      --danger: #EF4444;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      margin: 0;
+    }
+
+    a {
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus-visible {
+      text-decoration: underline;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      background: rgba(26, 29, 39, 0.72);
+    }
+
+    .tier-tagline {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+    }
+
+    .section-note {
+      padding: 0.85rem 1rem;
+      background: rgba(37, 99, 235, 0.08);
+      border: 1px solid rgba(37, 99, 235, 0.22);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.04;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .page-shell {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 1.25rem 3rem;
+    }
+
+    header {
+      padding: 3.5rem 0 1.8rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .subtitle {
+      margin-top: 1rem;
+      max-width: 42rem;
+      color: var(--text-secondary);
+      font-size: 1.08rem;
+    }
+
+    .intro-note {
+      margin-top: 1.35rem;
+      max-width: 46rem;
+    }
+
+    .control-room {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .rail {
+      padding: 1rem;
+      background: rgba(26, 29, 39, 0.76);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .rail-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+
+    .rail-phase {
+      margin: 1rem 0 0.55rem;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .rail-list {
+      position: relative;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .rail-list::before {
+      content: "";
+      position: absolute;
+      left: 0.9rem;
+      top: 0.4rem;
+      bottom: 0.4rem;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(59, 130, 246, 0.2), rgba(45, 51, 72, 0.85));
+    }
+
+    .rail-step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.8rem 1fr;
+      gap: 0.8rem;
+      padding: 0.8rem 0.9rem 0.8rem 0.2rem;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .rail-step:hover,
+    .rail-step:focus-visible {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(59, 130, 246, 0.2);
+      transform: translateX(2px);
+      outline: none;
+    }
+
+    .rail-step.active {
+      background: rgba(37, 99, 235, 0.09);
+      border-color: rgba(59, 130, 246, 0.26);
+    }
+
+    .rail-step.active .rail-node {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.12);
+    }
+
+    .rail-node {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.35rem;
+      height: 1.35rem;
+      margin: 0.3rem 0 0 0.22rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .rail-step-main {
+      display: grid;
+      gap: 0.18rem;
+    }
+
+    .rail-step-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .rail-icon {
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .rail-step-title {
+      font-size: 0.94rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .rail-step-copy {
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+    }
+
+    .focus-column {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .focus-card {
+      padding: 1.25rem;
+      min-height: 760px;
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 28%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0));
+    }
+
+    .focus-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .focus-title-block {
+      max-width: 48rem;
+    }
+
+    .focus-title {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+      margin-top: 0.9rem;
+    }
+
+    .focus-icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .focus-step-count {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.7rem;
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      border-radius: 999px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .focus-description {
+      margin-top: 1rem;
+      max-width: 50rem;
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .workspace {
+      margin-top: 1.25rem;
+      padding: 1rem;
+      border: 1px solid rgba(45, 51, 72, 0.92);
+      border-radius: 18px;
+      background: rgba(15, 17, 23, 0.5);
+    }
+
+    .workspace-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid rgba(45, 51, 72, 0.9);
+    }
+
+    .window-dots {
+      display: inline-flex;
+      gap: 0.4rem;
+    }
+
+    .window-dots span {
+      width: 0.7rem;
+      height: 0.7rem;
+      border-radius: 999px;
+      background: rgba(100, 116, 139, 0.35);
+    }
+
+    .workspace-label {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .visual-shell {
+      min-height: 410px;
+      padding: 1.15rem;
+      border-radius: 16px;
+      border: 1px solid rgba(45, 51, 72, 0.95);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .mono {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.93rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .mail-meta {
+      display: grid;
+      gap: 0.35rem;
+      margin-bottom: 1rem;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.92rem;
+    }
+
+    .mail-meta strong {
+      color: var(--text-primary);
+    }
+
+    .rule {
+      height: 1px;
+      background: rgba(45, 51, 72, 0.95);
+      margin: 0.9rem 0 1rem;
+    }
+
+    .doc-title {
+      margin-bottom: 0.2rem;
+      font-family: "Courier New", Courier, monospace;
+      font-weight: 700;
+    }
+
+    .doc-subtitle {
+      color: var(--text-muted);
+      margin-bottom: 0.9rem;
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    .highlight-line {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .prompt-sign {
+      color: var(--accent-light);
+      font-weight: 700;
+    }
+
+    .paste-mark {
+      color: var(--text-muted);
+    }
+
+    .key-hint {
+      display: inline-flex;
+      margin-top: 1rem;
+      padding: 0.12rem 0.45rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+
+    .panel-label {
+      margin-bottom: 0.75rem;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .warning-bar {
+      margin-top: 1rem;
+      padding: 0.8rem 0.9rem;
+      border-left: 3px solid var(--danger);
+      border-radius: 10px;
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .log-level {
+      color: var(--accent-light);
+      font-weight: 700;
+    }
+
+    .ok {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .bad {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .improvement-card {
+      padding: 1.05rem 1rem;
+      border-left: 3px solid var(--accent);
+      border-radius: 12px;
+      background: rgba(26, 29, 39, 0.82);
+    }
+
+    .run-card {
+      position: relative;
+      padding: 1.15rem;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(15, 17, 23, 0.48);
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.92rem;
+    }
+
+    .run-card.baseline {
+      border-color: var(--border);
+    }
+
+    .run-card.improved {
+      border-color: rgba(37, 99, 235, 0.4);
+      background: rgba(37, 99, 235, 0.06);
+    }
+
+    .run-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.18rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .run-badge.baseline {
+      background: rgba(100, 116, 139, 0.16);
+      color: var(--text-muted);
+    }
+
+    .run-badge.improved {
+      background: rgba(37, 99, 235, 0.16);
+      color: var(--accent-light);
+    }
+
+    .score-muted {
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .score-good {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .compare-col {
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9rem;
+    }
+
+    .compare-col.improved {
+      border-color: rgba(37, 99, 235, 0.4);
+    }
+
+    .compare-highlight {
+      background: rgba(37, 99, 235, 0.12);
+      border-radius: 6px;
+      padding: 0.05rem 0.2rem;
+    }
+
+    .eval-bar {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+    }
+
+    .eval-list {
+      margin: 0 0 0.9rem;
+      padding: 0;
+      list-style: none;
+      color: var(--text-secondary);
+    }
+
+    .eval-list li + li {
+      margin-top: 0.5rem;
+    }
+
+    .eval-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .action-btn.accept {
+      border-color: rgba(34, 197, 94, 0.4);
+      color: var(--success);
+    }
+
+    .accept-panel {
+      padding: 1.2rem;
+      border-radius: 14px;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      background: rgba(34, 197, 94, 0.05);
+    }
+
+    .loop-link {
+      color: var(--accent-light);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .loop-note {
+      margin-top: 1rem;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    .signal-grid {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 1rem;
+    }
+
+    .signal-box {
+      padding: 0.9rem;
+      border-radius: 12px;
+      border: 1px solid rgba(45, 51, 72, 0.95);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .signal-label {
+      margin-bottom: 0.35rem;
+      color: var(--text-muted);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .focus-nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .nav-group {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .nav-btn {
+      min-width: 8.5rem;
+      padding: 0.78rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    }
+
+    .nav-btn:hover,
+    .nav-btn:focus-visible {
+      background: var(--bg-card-hover);
+      border-color: rgba(59, 130, 246, 0.45);
+      outline: none;
+    }
+
+    .nav-btn[disabled],
+    .nav-btn[aria-disabled="true"] {
+      cursor: not-allowed;
+      color: var(--text-muted);
+      background: rgba(26, 29, 39, 0.65);
+    }
+
+    #step-counter {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .improvement-catalog {
+      padding: 1.25rem;
+    }
+
+    .catalog-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .catalog-item {
+      padding: 0.95rem 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(45, 51, 72, 0.92);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .catalog-item strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .catalog-item p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+
+    @media (min-width: 900px) {
+      .control-room {
+        grid-template-columns: 320px minmax(0, 1fr);
+        align-items: start;
+      }
+
+      .rail {
+        position: sticky;
+        top: 1.25rem;
+      }
+
+      .compare-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .catalog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 899px) {
+      .rail-list::before {
+        display: none;
+      }
+
+      .rail-step {
+        grid-template-columns: 1.5rem 1fr;
+      }
+
+      .focus-card {
+        min-height: auto;
+      }
+
+      .signal-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .focus-nav {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav-group {
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header>
+      <a class="back-link" href="index.html">← Zurück zum Proposal</a>
+      <div class="eyebrow">Live Example · Stufe 2</div>
+      <h1>Evolve-Pipeline — Live Example</h1>
+      <p class="subtitle">Ein konkreter Workflow, nicht als Slides gedacht, sondern als laufender Verbesserungsprozess für Mitarbeiter-Workflows.</p>
+      <p class="section-note intro-note">Das Beispiel zeigt keinen Produkt-Flow von Karl, sondern einen internen Mitarbeiter-Workflow: eingehende Partnerschaftsanfrage, manueller Einsatz eines Agents, Observer-Analyse und ein gezielter A/B-Verbesserungszyklus.</p>
+    </header>
+
+    <main class="control-room">
+      <aside class="rail card">
+        <div class="rail-header">
+          <div class="rail-title">Session Timeline</div>
+          <div class="eyebrow">10 Schritte</div>
+        </div>
+
+        <div class="rail-phase">Phase 1 — Aktueller Workflow</div>
+        <div class="rail-list">
+          <button class="rail-step active" data-step="1" aria-label="Schritt 1">
+            <span class="rail-node">1</span>
+            <span class="rail-step-main">
+              <span class="rail-step-head"><span class="rail-step-title">E-Mail kommt rein</span><span class="rail-icon">✉</span></span>
+              <span class="rail-step-copy">Neue Anfrage von Dr. Weber.</span>
+            </span>
+          </button>
+          <button class="rail-step" data-step="2" aria-label="Schritt 2">
+            <span class="rail-node">2</span>
+            <span class="rail-step-main">
+              <span class="rail-step-head"><span class="rail-step-title">PDF-Kontext lesen</span><span class="rail-icon">📄</span></span>
+              <span class="rail-step-copy">Interne Richtlinien werden gesucht.</span>
+            </span>
+          </button>
+          <button class="rail-step" data-step="3" aria-label="Schritt 3">
+            <span class="rail-node">3</span>
+            <span class="rail-step-main">
+              <span class="rail-step-head"><span class="rail-step-title">Prompt bauen</span><span class="rail-icon">💬</span></span>
+              <span class="rail-step-copy">Mail und Kontext werden manuell kombiniert.</span>
+            </span>
+          </button>
+          <button class="rail-step" data-step="4" aria-label="Schritt 4">
+            <span class="rail-node">4</span>
+            <span class="rail-step-main">
+              <span class="rail-step-head"><span class="rail-step-title">Baseline-Output</span><span class="rail-icon">🤖</span></span>
+              <span class="rail-step-copy">Antwort ist okay, aber generisch.</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="rail-phase">Phase 2 — Observer analysiert</div>
+        <div class="rail-list">
+          <button class="rail-step" data-step="5" aria-label="Schritt 5">
+            <span class="rail-node">5</span>
+            <span class="rail-step-main">
+              <span class="rail-step-head"><span class="rail-step-title">Session-Logs</span><span class="rail-icon">🔍</span></span>
+              <span class="rail-step-copy">Observer erkennt fehlenden Kontext.</span>
+            </span>
+          </button>
+          <button class="rail-step" data-step="6" aria-label="Schritt 6">
+            <span class="rail-node">6</span>
+            <span class="rail-step-main">
+              <span class="rail-step-head"><span class="rail-step-title">Improvement</span><span class="rail-icon">✨</span></span>
+              <span class="rail-step-copy">`email-guidelines.md` wird vorgeschlagen.</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="rail-phase">Phase 3 — A/B Test</div>
+        <div class="rail-list">
+          <button class="rail-step" data-step="7" aria-label="Schritt 7">
+            <span class="rail-node">7</span>
+            <span class="rail-step-main">
+              <span class="rail-step-head"><span class="rail-step-title">Run A</span><span class="rail-icon">⬜</span></span>
+              <span class="rail-step-copy">Baseline ohne Verbesserung.</span>
+            </span>
+          </button>
+          <button class="rail-step" data-step="8" aria-label="Schritt 8">
+            <span class="rail-node">8</span>
+            <span class="rail-step-main">
+              <span class="rail-step-head"><span class="rail-step-title">Run B</span><span class="rail-icon">🟦</span></span>
+              <span class="rail-step-copy">Verbesserter Run mit Hook-Injektion.</span>
+            </span>
+          </button>
+          <button class="rail-step" data-step="9" aria-label="Schritt 9">
+            <span class="rail-node">9</span>
+            <span class="rail-step-main">
+              <span class="rail-step-head"><span class="rail-step-title">Human Eval</span><span class="rail-icon">👁</span></span>
+              <span class="rail-step-copy">A und B werden verglichen.</span>
+            </span>
+          </button>
+          <button class="rail-step" data-step="10" aria-label="Schritt 10">
+            <span class="rail-node">10</span>
+            <span class="rail-step-main">
+              <span class="rail-step-head"><span class="rail-step-title">Accept</span><span class="rail-icon">✅</span></span>
+              <span class="rail-step-copy">Verbesserung wird Standard.</span>
+            </span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="focus-column">
+        <section class="focus-card card">
+          <div class="focus-top">
+            <div class="focus-title-block">
+              <div id="phase-label" class="tier-tagline">Phase 1 — Aktueller Workflow</div>
+              <div class="focus-title">
+                <div id="focus-icon" class="focus-icon" aria-hidden="true">✉</div>
+                <div>
+                  <h2 id="focus-title">Eine Partnerschaftsanfrage kommt rein</h2>
+                </div>
+              </div>
+              <p id="focus-description" class="focus-description">Der Mitarbeiter öffnet sein Postfach. Eine neue Anfrage von Dr. Weber wartet auf Antwort.</p>
+            </div>
+            <div id="step-counter" class="focus-step-count">Schritt 1 / 10</div>
+          </div>
+
+          <div class="workspace">
+            <div class="workspace-topbar">
+              <div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <div id="workspace-label" class="workspace-label">E-Mail-Client</div>
+            </div>
+            <div id="visual-shell" class="visual-shell"></div>
+            <div class="signal-grid">
+              <div class="signal-box">
+                <div class="signal-label">Input</div>
+                <div id="signal-input">Externe Anfrage startet den Workflow.</div>
+              </div>
+              <div class="signal-box">
+                <div class="signal-label">Observer Insight</div>
+                <div id="signal-insight">Noch keine Auswertung. Das ist der Ausgangspunkt.</div>
+              </div>
+              <div class="signal-box">
+                <div class="signal-label">Outcome</div>
+                <div id="signal-outcome">Der Mitarbeiter muss Kontext und Antwort manuell vorbereiten.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="focus-nav">
+            <div class="nav-group">
+              <button id="btn-prev" class="nav-btn" aria-disabled="true" disabled>← Zurück</button>
+              <button id="btn-next" class="nav-btn">Weiter →</button>
+            </div>
+            <div class="eyebrow">Control Room · Active Step</div>
+          </div>
+        </section>
+
+        <section class="improvement-catalog card">
+          <div class="catalog-head">
+            <div>
+              <div class="tier-tagline">Verbesserungshebel</div>
+              <h3>10 Wege, agentische Workflows besser zu machen</h3>
+            </div>
+            <div class="eyebrow">Nicht nur ein Weg</div>
+          </div>
+          <div class="catalog-grid">
+            <div class="catalog-item"><strong>1. Besserer Kontext</strong><p>Relevante Dateien, Policies oder Guidelines automatisch bereitstellen statt manuell zu copy-pasten.</p></div>
+            <div class="catalog-item"><strong>2. Strukturierte Prompts</strong><p>Aufgaben in wiederverwendbare Prompt-Templates und klar definierte Output-Formate überführen.</p></div>
+            <div class="catalog-item"><strong>3. Skills</strong><p>Spezifische Arbeitsweisen als Skill kapseln, damit gute Muster nicht bei Einzelpersonen hängen bleiben.</p></div>
+            <div class="catalog-item"><strong>4. Hooks</strong><p>Kontext, Checks oder Routing automatisch injizieren, sobald ein bestimmter Workflow erkannt wird.</p></div>
+            <div class="catalog-item"><strong>5. Tool-Boundaries</strong><p>Saubere Grenzen zwischen Recherche, Schreiben, Prüfen und Ausführen definieren.</p></div>
+            <div class="catalog-item"><strong>6. Eval-Kriterien</strong><p>Vorab festlegen, woran ein guter Output gemessen wird: Qualität, Vollständigkeit, Ton, Sicherheit.</p></div>
+            <div class="catalog-item"><strong>7. Human Review Gates</strong><p>An kritischen Stellen bewusst Menschen entscheiden lassen statt Auto-Accept zu vertrauen.</p></div>
+            <div class="catalog-item"><strong>8. Recovery Paths</strong><p>Fehlerfälle und unstabile Inputs mit klaren Fallbacks und Retry-Logik absichern.</p></div>
+            <div class="catalog-item"><strong>9. A/B-Tests</strong><p>Verbesserungen isoliert gegeneinander testen, statt mehrere Änderungen gleichzeitig einzubauen.</p></div>
+            <div class="catalog-item"><strong>10. Standardisierung</strong><p>Was funktioniert, wird Teil des Default-Setups, damit das Team dauerhaft davon profitiert.</p></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var stepCounter = document.getElementById("step-counter");
+      var phaseLabel = document.getElementById("phase-label");
+      var focusIcon = document.getElementById("focus-icon");
+      var focusTitle = document.getElementById("focus-title");
+      var focusDescription = document.getElementById("focus-description");
+      var workspaceLabel = document.getElementById("workspace-label");
+      var visualShell = document.getElementById("visual-shell");
+      var signalInput = document.getElementById("signal-input");
+      var signalInsight = document.getElementById("signal-insight");
+      var signalOutcome = document.getElementById("signal-outcome");
+      var prevButton = document.getElementById("btn-prev");
+      var nextButton = document.getElementById("btn-next");
+      var railSteps = document.querySelectorAll(".rail-step");
+
+      var steps = [
+        {
+          phase: "Phase 1 — Aktueller Workflow",
+          icon: "✉",
+          title: "Eine Partnerschaftsanfrage kommt rein",
+          description: "Der Mitarbeiter öffnet sein Postfach. Eine neue Anfrage von Dr. Weber wartet auf Antwort.",
+          workspace: "E-Mail-Client",
+          input: "Externe Anfrage startet den Workflow.",
+          insight: "Noch keine Auswertung. Das ist der Ausgangspunkt.",
+          outcome: "Der Mitarbeiter muss Kontext und Antwort manuell vorbereiten.",
+          html:
+            '<div class="mail-meta">' +
+            '<div><strong>Von:</strong> dr.weber@mentalworks.de</div>' +
+            '<div><strong>An:</strong> team@aidvance.de</div>' +
+            '<div><strong>Betreff:</strong> Partnerschaftsanfrage</div>' +
+            "</div>" +
+            '<div class="rule"></div>' +
+            '<div class="mono">Hallo,\n\nwir würden gerne mit AIDVANCE eine Kooperation im Bereich\nmentale Gesundheit am Arbeitsplatz besprechen.\n\nUnser Ansatz kombiniert evidenzbasierte Prävention mit\ndigitalem Screening. Anbei unser Konzeptpapier (PDF).\n\nWir sehen großes Potential für eine strategische Partnerschaft\nund freuen uns auf einen ersten Austausch.\n\nMit freundlichen Grüßen,\nDr. Katrin Weber\nMentalWorks GmbH</div>'
+        },
+        {
+          phase: "Phase 1 — Aktueller Workflow",
+          icon: "📄",
+          title: "Internes Dokument: Partnerschaftsrichtlinien",
+          description: "Vor der Antwort schaut der Mitarbeiter in die internen Richtlinien. Er kopiert den relevanten Abschnitt heraus.",
+          workspace: "Dokument-Viewer",
+          input: "Interne Richtlinien werden als PDF oder Dokument geöffnet.",
+          insight: "Struktur liegt vor, ist aber noch nicht maschinenlesbar eingebunden.",
+          outcome: "Relevanter Kontext muss manuell übertragen werden.",
+          html:
+            '<div class="mono">' +
+            '<div class="doc-title">AIDVANCE Partnerschaftsrichtlinien v2.1</div>' +
+            '<div class="doc-subtitle">Stand: Januar 2026 — intern, nicht zur Weitergabe</div>' +
+            '<div class="highlight-line">§ 3 — Voraussetzungen für Kooperationen</div>' +
+            "<div>─────────────────────────────────────────</div>" +
+            "<div>Kooperationen erfordern die Erfüllung aller drei Kriterien:</div><br>" +
+            '<div class="highlight-line">  (1) Alignment mit der AIDVANCE Mission und Werten</div>' +
+            '<div class="highlight-line">  (2) Datenschutz-Prüfung durch Legal (mind. 5 Werktage)</div>' +
+            '<div class="highlight-line">  (3) Freigabe durch die Geschäftsführung vor Vertragsunterzeichnung</div><br>' +
+            "<div>Erstkontakt und informelle Gespräche sind ohne Freigabe möglich.</div>" +
+            "<div>Verbindliche Zusagen sind erst nach (2) und (3) zulässig.</div>" +
+            "</div>"
+        },
+        {
+          phase: "Phase 1 — Aktueller Workflow",
+          icon: "💬",
+          title: "Prompt an Claude — manuell zusammengestellt",
+          description: "Der Mitarbeiter öffnet Claude, kopiert die Mail und das Dokument manuell hinein und formuliert eine Aufgabe.",
+          workspace: "Claude Prompt Composer",
+          input: "Mail und Richtlinien werden manuell in einen Prompt gepackt.",
+          insight: "Viel guter Kontext ist vorhanden, aber noch nicht operationalisiert.",
+          outcome: "Qualität hängt stark davon ab, wie sauber der Mensch promptet.",
+          html:
+            '<div class="mono"><span class="prompt-sign">&gt;</span> Hey Claude, ich hab eine Partnerschaftsanfrage bekommen.\n\n  Hier die Mail:\n  <span class="paste-mark">[paste — Inhalt aus Step 1]</span>\n\n  Und hier unsere internen Partnerschaftsrichtlinien:\n  <span class="paste-mark">[paste — Inhalt aus Step 2]</span>\n\n  Schreib bitte eine professionelle Antwort-Mail.\n  Wir haben Interesse, aber ich will auf die Datenschutz-Prüfung\n  hinweisen. Ton: freundlich, professionell.\n\n  <span class="key-hint">↵ Enter</span></div>'
+        },
+        {
+          phase: "Phase 1 — Aktueller Workflow",
+          icon: "🤖",
+          title: "Antwort des Agents — Baseline",
+          description: "Claude antwortet. Die Antwort ist korrekt, aber generisch. Kein AIDVANCE-Ton, ein wichtiger Punkt fehlt.",
+          workspace: "Agent Output Review",
+          input: "Der Agent arbeitet mit manuell kopiertem Plaintext.",
+          insight: "Wichtige Kriterien werden nicht konsistent adressiert.",
+          outcome: "Ein brauchbarer, aber nicht standardreifer Entwurf entsteht.",
+          html:
+            '<div class="panel-label">Agent-Output</div>' +
+            '<div class="mono">Betreff: Re: Partnerschaftsanfrage\n\nSehr geehrte Frau Dr. Weber,\n\nvielen Dank für Ihre Nachricht und Ihr Interesse an einer\nZusammenarbeit mit AIDVANCE.\n\nWir haben Ihr Konzeptpapier erhalten und sehen durchaus\ninteressante Anknüpfungspunkte zwischen unseren Ansätzen.\n\nBevor wir konkrete Schritte besprechen können, müssen wir\nzunächst eine interne Datenschutz-Prüfung durchführen.\nWir melden uns nach Abschluss dieser Prüfung bei Ihnen.\n\nMit freundlichen Grüßen,\nAIDVANCE Team</div>' +
+            '<div class="warning-bar">⚠ Kein AIDVANCE-Ton · Geschäftsführungs-Freigabe nicht erwähnt · Struktur generisch</div>'
+        },
+        {
+          phase: "Phase 2 — Observer analysiert",
+          icon: "🔍",
+          title: "Observer wertet die Session aus",
+          description: "Nach der Session analysiert der Observer automatisch was passiert ist — und wo Verbesserungspotenzial liegt.",
+          workspace: "Structured Log Viewer",
+          input: "Session-Logs, Kriterien-Check und Tonalitäts-Signale werden ausgewertet.",
+          insight: "Fehlender Stilguide und unstrukturierter Kontext sind die zentralen Schwächen.",
+          outcome: "Das Problem wird nicht nur gespürt, sondern konkret diagnostiziert.",
+          html:
+            '<div class="mono">SESSION LOG — 2026-01-14 09:34 UTC\n────────────────────────────────────────────────────────────────\n\n[09:34:01]  <span class="log-level">CONTEXT</span>    Kein Tonalitäts-Guide in der Session\n            → Agent hat keinen Zugriff auf AIDVANCE-Stil-Vorgaben\n\n[09:34:01]  <span class="log-level">CONTEXT</span>    Partnerschaftsrichtlinien als Plaintext\n            → Struktur geht verloren; Kriterien nicht maschinenlesbar\n\n[09:34:04]  <span class="log-level">EVAL</span>       Kriterien-Check: 2/3 adressiert\n            → Datenschutz-Prüfung: <span class="ok">✓</span>\n            → Mission-Alignment: <span class="bad">✗</span> (nicht erwähnt)\n            → Geschäftsführungs-Freigabe: <span class="bad">✗</span> (nicht erwähnt)\n\n[09:34:04]  <span class="log-level">EVAL</span>       Tonalität: 61/100\n            → Referenzton nicht verfügbar; generisches Muster verwendet</div>'
+        },
+        {
+          phase: "Phase 2 — Observer analysiert",
+          icon: "✨",
+          title: "Improvement vorgeschlagen",
+          description: "Aus dem Log leitet der Observer eine konkrete Verbesserung ab: eine neue Kontext-Datei für genau diesen Workflow.",
+          workspace: "Improvement Proposal",
+          input: "Observer übersetzt Diagnose in eine testbare Verbesserung.",
+          insight: "Ein automatisierbarer Kontexthebel ist stärker als immer bessere manuelle Prompts.",
+          outcome: "Aus Analyse wird eine konkrete, isoliert testbare Intervention.",
+          html:
+            '<div class="improvement-card mono">Neues Kontext-File vorgeschlagen\n\n  email-guidelines.md\n  ────────────────────────────────────────────────\n\n  Enthält:\n  · AIDVANCE-Tonalitäts-Guide (Beispiele, Anti-Patterns)\n  · Pflicht-Checkpunkte für Partnerschafts-Antworten\n    (alle 3 Kriterien aus § 3 müssen adressiert werden)\n  · Template-Struktur für Erstantworten\n\n  Trigger: Wird via Hook automatisch injiziert wenn\n  "Partnerschaft" oder "Kooperation" im Prompt erkannt wird.\n\n  Nächster Schritt: A/B Test →</div>' +
+            '<p class="section-note" style="margin-top: 1rem;">Kein manuelles Eingreifen nötig. Das File wird einmalig angelegt und danach automatisch verwendet.</p>'
+        },
+        {
+          phase: "Phase 3 — A/B Test",
+          icon: "⬜",
+          title: "Run A — Baseline (ohne Verbesserung)",
+          description: "Gleicher Prompt, gleiche Situation wie in Schritt 3 — aber diesmal als kontrollierter Test-Run.",
+          workspace: "A/B Test · Run A",
+          input: "Gleiche Aufgabe, aber ohne neue Richtlinien-Datei.",
+          insight: "Run A dient als Baseline und macht den Nutzen der Änderung messbar.",
+          outcome: "Bewertung bleibt bei 61/100 und 2 von 3 Kriterien.",
+          html:
+            '<div class="run-card baseline"><span class="run-badge baseline">Baseline</span><div class="mono">┌─ Run A ────────────────────────────────────────────┐\n│                                                      │\n│  Kontext:   Nur manuell kopierter Plaintext          │\n│  Trigger:   kein                                     │\n│  Injiziert: —                                        │\n│                                                      │\n│  Agent-Output:                                       │\n│  "...Wir müssen zunächst eine interne Datenschutz-   │\n│  Prüfung durchführen. Wir melden uns danach..."      │\n│                                                      │\n│  Bewertung:   <span class="score-muted">61 / 100</span>                               │\n│  Kriterien:   2 / 3 adressiert                      │\n│  Ton:         generisch                              │\n└──────────────────────────────────────────────────────┘</div></div>'
+        },
+        {
+          phase: "Phase 3 — A/B Test",
+          icon: "🟦",
+          title: "Run B — Mit email-guidelines.md injiziert",
+          description: "Gleicher Prompt — aber jetzt wird email-guidelines.md automatisch via Hook eingefügt. Das Ergebnis ist deutlich besser.",
+          workspace: "A/B Test · Run B",
+          input: "Hook injiziert die neue Kontext-Datei automatisch.",
+          insight: "Die Verbesserung wirkt nicht zufällig, sondern systematisch und reproduzierbar.",
+          outcome: "Bewertung steigt auf 89/100 und alle 3 Kriterien sind adressiert.",
+          html:
+            '<div class="run-card improved"><span class="run-badge improved">Improved</span><div class="mono">┌─ Run B ────────────────────────────────────────────┐\n│                                                      │\n│  Kontext:   Plaintext + email-guidelines.md (auto)   │\n│  Trigger:   "Partnerschaft" erkannt → Hook ausgelöst │\n│  Injiziert: email-guidelines.md                      │\n│                                                      │\n│  Agent-Output:                                       │\n│  "...Ihr Ansatz passt gut zu unserer Mission,        │\n│  Menschen durch digitale Prävention zu stärken.      │\n│  Bevor wir konkrete Schritte besprechen,             │\n│  durchlaufen wir intern eine Datenschutz-Prüfung     │\n│  (ca. 5 Werktage) und holen die Freigabe der         │\n│  Geschäftsführung ein..."                            │\n│                                                      │\n│  Bewertung:   <span class="score-good">89 / 100</span>                               │\n│  Kriterien:   3 / 3 adressiert                      │\n│  Ton:         AIDVANCE-konform                       │\n└──────────────────────────────────────────────────────┘</div></div>'
+        },
+        {
+          phase: "Phase 3 — A/B Test",
+          icon: "👁",
+          title: "Side-by-side Vergleich",
+          description: "Ein Mensch schaut auf beide Outputs. Die Unterschiede sind auf einen Blick sichtbar.",
+          workspace: "Human Evaluation",
+          input: "A und B liegen nebeneinander als vergleichbare Artefakte.",
+          insight: "Genau die neuen Passagen zeigen, warum der bessere Output nicht nur subjektiv besser wirkt.",
+          outcome: "Human Eval liefert die Grundlage für eine belastbare Entscheidung.",
+          html:
+            '<div class="compare-grid">' +
+            '<div class="compare-col"><div class="panel-label">Run A · Baseline</div><div>„Wir müssen zunächst eine interne Datenschutz-Prüfung durchführen. Wir melden uns danach bei Ihnen.“</div></div>' +
+            '<div class="compare-col improved"><div class="panel-label">Run B · Improved</div><div><span class="compare-highlight">„Ihr Ansatz passt gut zu unserer Mission</span>, Menschen durch digitale Prävention zu stärken. <span class="compare-highlight">Bevor wir konkrete Schritte besprechen, durchlaufen wir intern eine Datenschutz-Prüfung (ca. 5 Werktage) und holen die Freigabe der Geschäftsführung ein.</span> Wir freuen uns darauf, das Gespräch danach fortzuführen.“</div></div>' +
+            "</div>" +
+            '<div class="eval-bar"><div style="margin-bottom: 0.8rem;"><strong>Bewertung Run B:</strong></div><ul class="eval-list"><li><span class="ok">✓</span> Tonalität passt — Mission-Referenz vorhanden</li><li><span class="ok">✓</span> Alle 3 Kriterien aus § 3 adressiert</li><li><span class="ok">✓</span> Professioneller Aufbau — klare Struktur</li></ul><div class="eval-actions"><span>→ Verbesserung akzeptiert?</span><span class="action-btn accept">Accept ✓</span><span class="action-btn">Ablehnen</span></div></div>'
+        },
+        {
+          phase: "Phase 3 — A/B Test",
+          icon: "✅",
+          title: "Verbesserung akzeptiert",
+          description: "email-guidelines.md wird Teil des Standard-Setups. Der nächste Zyklus beginnt automatisch.",
+          workspace: "Accepted Standard",
+          input: "Der Mensch bestätigt, dass Run B signifikant besser ist.",
+          insight: "Die Verbesserung wandert aus dem Experiment in das Standard-Setup des Teams.",
+          outcome: "Der nächste Observer-Zyklus startet mit einer besseren Ausgangsbasis.",
+          html:
+            '<div class="accept-panel"><div class="mono">✓  email-guidelines.md wird zum Standard\n\n   Das File ist jetzt Teil des permanenten Kontext-Sets\n   für Partnerschafts-Workflows.\n\n─────────────────────────────────────────────────────\n\nNächster Zyklus:\n\n   Observer läuft weiter. Weitere Sessions werden\n   beobachtet. Neue Improvements werden vorgeschlagen\n   sobald Muster erkannt werden.\n\n   ↺  <a href="#step-5" class="loop-link" id="loop-step-5">zurück zu Schritt 5 — Observer wertet aus</a></div></div><div class="loop-note">Der Evolve-Zyklus läuft kontinuierlich. Jede Session macht den Agent besser.</div>'
+        }
+      ];
+
+      var currentStep = 1;
+
+      function bindLoopLink() {
+        var loopLink = document.getElementById("loop-step-5");
+        if (!loopLink) {
+          return;
+        }
+        loopLink.addEventListener("click", function (event) {
+          event.preventDefault();
+          goToStep(5);
+        });
+      }
+
+      function goToStep(stepNumber) {
+        if (stepNumber < 1 || stepNumber > steps.length) {
+          return;
+        }
+
+        currentStep = stepNumber;
+        var step = steps[stepNumber - 1];
+
+        phaseLabel.textContent = step.phase;
+        focusIcon.textContent = step.icon;
+        focusTitle.textContent = step.title;
+        focusDescription.textContent = step.description;
+        workspaceLabel.textContent = step.workspace;
+        visualShell.innerHTML = step.html;
+        signalInput.textContent = step.input;
+        signalInsight.textContent = step.insight;
+        signalOutcome.textContent = step.outcome;
+        stepCounter.textContent = "Schritt " + stepNumber + " / " + steps.length;
+
+        railSteps.forEach(function (button, index) {
+          var active = index === stepNumber - 1;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-current", active ? "step" : "false");
+        });
+
+        prevButton.disabled = stepNumber === 1;
+        prevButton.setAttribute("aria-disabled", stepNumber === 1 ? "true" : "false");
+        nextButton.disabled = stepNumber === steps.length;
+        nextButton.setAttribute("aria-disabled", stepNumber === steps.length ? "true" : "false");
+
+        bindLoopLink();
+      }
+
+      railSteps.forEach(function (button) {
+        button.addEventListener("click", function () {
+          goToStep(Number(button.getAttribute("data-step")));
+        });
+      });
+
+      prevButton.addEventListener("click", function () {
+        goToStep(currentStep - 1);
+      });
+
+      nextButton.addEventListener("click", function () {
+        goToStep(currentStep + 1);
+      });
+
+      goToStep(1);
+    }());
+  </script>
+</body>
+</html>
